@@ -367,7 +367,13 @@ input{
     font-size: 3rem;
     width: 50rem;
   }
-  
+.alert1 {
+    padding: 20px;
+    background-color: #08bf11;
+    color: white;
+    font-size: 3rem;
+    width: 50rem;
+}
 .closebtn {
     margin-left: 15px;
     color: white;

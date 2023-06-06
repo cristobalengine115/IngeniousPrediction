@@ -1,4 +1,5 @@
-from django.shortcuts import render
+import email
+from django.shortcuts import render, redirect
 # from .models import Profesor
 
 #Dependencias analisis
@@ -20,20 +21,31 @@ def index(request):
 
 def validar(request):
     if request.method == 'POST':
-        print(request.POST['email'])
-        profesor = Profesor.object.get(email=request.POST['email'])
-        # try:
-        #     profesor = Profesor.object.get(email=request.POST['email'])
-        #     print(profesor)
-        #     messages.success(request, "Bienvenido")
-        #     return render(request, 'EDA.html')
-        # except:
-        #     messages.error(request, "Usuario No Encontrado")
-        #     print("fallo")
-        #     return render(request, 'index.html')
-        # username= request.POST["email"]
-        # password = request.POST["psw"]
-        
+        try:
+            profesor = Profesor.objects.get(email=request.POST['email'])
+            print(profesor)
+            messages.success(request, "Bienvenido")
+            return redirect('EDA')
+        except:
+            messages.error(request, "Usuario No Encontrado")
+            return render(request,'index.html')
+        username= request.POST["email"]
+        password = request.POST["psw"]
+def registrar(request):
+    if request.method == 'POST':
+        p_nombre = request.POST['nombre']
+        p_apellido = request.POST['apellidos']
+        p_correo = request.POST['correo']
+        p_password1 = request.POST['psw']
+        p_password2 = request.POST['pswCon'] 
+        if p_password1 == p_password2:
+            profe = Profesor(nombre=p_nombre, apellido=p_apellido, email=p_correo, passwd=p_password1)
+            profe.save()
+            print("usuario creado")
+            return redirect('EDA')
+        else:
+            messages.error(request, "Contraseña no igual")
+            return render(request,'index.html')
 
 def GUI(request):
     # SourceDocument = pd.read_csv("IngeniousPrediction/data/PlaneaDataSet.csv")

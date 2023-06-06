@@ -3,6 +3,7 @@ from . import views
 urlpatterns =[
     path('', views.index),
     path('validar', views.validar),
+    path('registrar', views.registrar),
     path('IngeniousPrediction', views.index, name="IngeniousPrediction"),
     path('EDA', views.EDA, name="EDA"),
     path('PCA', views.PCA, name="PCA"),
