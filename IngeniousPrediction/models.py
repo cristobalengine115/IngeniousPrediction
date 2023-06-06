@@ -1,6 +1,17 @@
 from django.db import models
+from django.core import validators
 
-# Create your models here.
-class Profesor(models.Model):
-    profe_id = models.BigAutoField(primary_key=True)
-    nombre = models.CharField(max_length = 50, null=True)
+
+
+class Proyecto(models.Model):
+    name = models.CharField(max_length=80)
+    description = models.CharField(max_length=200)
+    URL = models.CharField(max_length=150, null=True)
+    data = models.FileField(upload_to='IngeniousPrediction/data/')
+
+    def __str__(self):
+        return self.title
+
+    def delete(self, *args, **kwargs):
+        self.data.delete()
+        super().delete(*args, **kwargs)
