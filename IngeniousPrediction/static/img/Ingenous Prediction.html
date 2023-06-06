@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!-- saved from url=(0022)http://127.0.0.1:8000/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./Ingenous Prediction_files/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="./Ingenous Prediction_files/main.css">
+    <link rel="stylesheet" href="./Ingenous Prediction_files/normalize.css">
+    <link rel="icon" href="http://127.0.0.1:8000/static/img/favicon.ico" type="image/png">
+    <link rel="stylesheet" href="./Ingenous Prediction_files/font-awesome.min.css">
+    <title>Ingenous Prediction</title>
+</head>
+<body>
+    
+    <header class="headerIP">
+        <div class="logo">
+            <img src="./Ingenous Prediction_files/logo.png" alt="Logo IP">
+        </div>
+        <nav class="navbar navbar-expand-lg  navIP">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="">
+                            <p class="navText">Ingenious Prediction</p>
+                        </li>
+                        <li class="nav-item itemIP">
+                            <a class="nav-link " aria-current="page" href="http://127.0.0.1:8000/#">¿Quiénes Somos?</a>
+                        </li>
+                        <li class="nav-item itemIP">
+                            <a class="nav-link " href="http://127.0.0.1:8000/#">Misión y Visión</a>
+                        </li>
+                        <li class="nav-item itemIP">
+                            <a class="nav-link " href="http://127.0.0.1:8000/#">Precios</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <dialog class="form-popup" id="myForm" style="display: none;">
+        <form action="http://127.0.0.1:8000/action_page.php" class="form-container">
+            <h1 class="signintitle">Iniciar Sesión</h1>
+
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" required="">
+
+            <label for="psw"><b>Coontraseña</b></label>
+            <input type="password" placeholder="Enter Password" name="psw" required="">
+
+            <button type="submit" class="btn">Iniciar Sesión</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Cerrar</button>
+        </form>
+    </dialog>
+
+    <dialog class="form-popup" id="myForm1" style="display: none;">
+        <form action="http://127.0.0.1:8000/action_page.php" class="form-container">
+            <h1 class="signintitle">Registrese</h1>
+
+            <label for="nombre"><b>Nombres</b></label>
+            <input type="text" placeholder="Ingresa tu nombre" name="nombre" required="">
+
+            <label for="apellidos"><b>Apellidos</b></label>
+            <input type="text" placeholder="Ingresa tus apellidos" name="apellidos" required="">
+
+            <label for="correo"><b>Correo Electrónico</b></label>
+            <input type="text" placeholder="Ingresa tu correo electrónico" name="correo" required="">
+
+            <label for="psw"><b>Ingrese Contraseña</b></label>
+            <input type="password" placeholder="Ingresa una contraseña" name="psw" required="">
+
+            <label for="pswCon"><b>Confirme Contraseña</b></label>
+            <input type="password" placeholder="Repite la contraseña" name="pswCon" required="">
+
+            <button type="submit" class="btn">Iniciar Sesión</button>
+            <button type="button" class="btn cancel" onclick="closeForm1()">Cerrar</button>
+        </form>
+    </dialog>
+
+    <section class="login">
+        <div class="login_info">
+            <h1 class="login_title">¡Bienvenido a Ingenious Prediction!</h1>
+            <p class="login_text">Una nueva manera de administrar y usar los datos de los estudiantes para mejorar su camino en el aprendizaje.</p>
+            <div class="login_buttons">
+                <a class="btn" href="http://127.0.0.1:8000/#" onclick="openForm()" role="button" style="background-color: #38B6FF; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem;">Inicia Sesión</a>
+                <a class="btn" href="http://127.0.0.1:8000/#" onclick="openForm1()" role="button" style="background-color: #FCDC05; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; ">Regístrate</a>
+            </div>
+        </div>
+        
+        <div class="login_logo">
+            <img src="./Ingenous Prediction_files/index.png" alt="Imagen principal">
+        </div>
+    </section>
+
+    <section id="conocenos">
+		<div class="nosotros">
+            <h1 class="nosotros_head">Nosostros somos...</h1>
+            <p class="nosotros_text">Un sitio web para el control, administración, seguimiento, segmentación, clasificación y predicción del historial  académico de los alumnos. Su propósito es, por medio del registro académico, poder descubrir qué métodos de enseñanza y qué estrategias de aprendizaje usar con qué estudiantes en qué situación. Tenemos como base tres ejes de acción:</p>
+		</div>
+        <div class="actions">
+            <div class="cardIP">
+                <img src="./Ingenous Prediction_files/administra_datos.png" class="" alt="...">
+                <div class="">
+                    <h5 class="card-title">Administra</h5>
+                    <p class="card-text">A través de Ingenious Prediction podrás tener control total del desempeño de tus alumos.</p>
+                </div>
+            </div>
+            <div class="cardIP">
+                <img src="./Ingenous Prediction_files/procesa.png" class="" alt="...">
+                <div>
+                    <h5 class="card-title">Procesa</h5>
+                    <p class="card-text">Los datos servirán como materia prima para nuevos modelos de conocimiento.</p>
+                </div>
+            </div>
+
+            <div class="cardIP">
+                <img src="./Ingenous Prediction_files/usa.png" class="" alt="...">
+                <div class="">
+                    <h5 class="card-title">Aplica</h5>
+                    <p class="card-text">Cada modelo obtenido te servirá para segmentar, clasificar o pronósticar sobre el camino que deben seguir tus estudiantes.</p>
+                </div>
+            </div>
+	</div>
+
+	</section>
+    <footer class="text-center text-white footer" style="background-color: #AAD7FD;" ;="">
+        <div class="social-media">
+            <a class="btn text-white " style="background-color: #3b5998; width: 5rem; height: 5.1rem;" href="http://127.0.0.1:8000/#!" role="button">
+                <i class="fa fa-facebook-f fa-4x"></i>
+            </a>
+            <a class="btn text-white btn-floating" style="background-color: #55acee; width: 5rem; height: 5.1rem;" href="http://127.0.0.1:8000/#!" role="button">
+                <i class="fa fa-twitter fa-4x"></i>
+            </a>
+            <a class="btn text-white btn-floating" style="background-color: #ac2bac; width: 5rem; height: 5.1rem;" href="http://127.0.0.1:8000/#!" role="button">
+                <i class="fa fa-instagram fa-4x"></i>
+            </a>
+            <a class="btn text-white btn-floating " style="background-color: #333333; width: 5rem; height: 5.1rem;" href="http://127.0.0.1:8000/#!" role="button">
+                <i class="fa fa-github fa-4x"></i>
+            </a>
+        </div>
+    <div class="text-center p-3" style="background-color: #38B6FF;">
+       <img src="./Ingenous Prediction_files/logo.png" alt="logotipo" width="70rem" height="40rem"> <p style="font-size: 2rem; display: inline;">Ingenious Prediction</p> 
+    </div>
+  </footer>
+    <script src="./Ingenous Prediction_files/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="./Ingenous Prediction_files/main.js"></script>
+
+</body></html>

@@ -130,7 +130,6 @@ img {
   .form-container input[type=text], .form-container input[type=password] {
     width: 100%;
     padding: 15px;
-    height: 7rem;
     margin: 5px 0 22px 0;
     border: none;
     background: #f1f1f1;
@@ -140,7 +139,6 @@ img {
   .form-container input[type=text]:focus, .form-container input[type=password]:focus {
     background-color: #ddd;
     outline: none;
-    font-size: 2rem;
   }
   
   /* Set a style for the submit/login button */
@@ -153,7 +151,6 @@ img {
     width: 100%;
     margin-bottom:10px;
     opacity: 0.8;
-    font-size: 2rem;
   }
   
   /* Add a red background color to the cancel button */
@@ -231,7 +228,7 @@ img {
     width: 20%;
     height: 100%;
     background-color: var(--azul);
-    
+
 }
 .aside_main img{
     margin-top: 2rem;
@@ -331,54 +328,3 @@ img {
     right: 28px;
     width: 28rem;
 }
-
-.mainLogo{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.signintitle{
-    text-align: center;
-}
-.inputLogin{
-    font-size: 2rem;
-}
-
-input::placeholder {
-    font-size: 2rem;
-}
-input{
-    font-size: 4rem;
-}
-
-.error{
-    font-size: 3rem;
-    width: 50rem;
-    display: flex;
-    justify-content: center;
-    background-color: red;
-    list-style-type: none;
-}
-
-.alert {
-    padding: 20px;
-    background-color: #f44336;
-    color: white;
-    font-size: 3rem;
-    width: 50rem;
-  }
-  
-.closebtn {
-    margin-left: 15px;
-    color: white;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-  .closebtn:hover {
-    color: black;
-  }

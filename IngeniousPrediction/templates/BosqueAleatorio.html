@@ -10,37 +10,36 @@
         <link rel="stylesheet" href="{% static '/css/normalize.css' %}" >
         <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/png"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <title>Ingenous Prediction</title>
+        <title>Ingenous Prediction Bosques Aleatorios</title>
     </head>
 <body>
     <div class="headerAside">
         <aside class="aside_main">
-            <img src="{% static '/img/logo.png' %}" alt="">
-            <p class="title_GUI">INGENIOUS PREDICTION</p>
+            <a href="IngeniousPrediction" class="mainLogo">
+                <img src="{% static '/img/logo.png' %}" alt="">
+                <p class="title_GUI">INGENIOUS PREDICTION</p>
+            </a>  
             <div class="menu_main">
-                <div class="option">
-                    <a href="#">
+                <a  href="EDA" class="option">
                         <img src="{% static '/img/lupa.png' %}" alt="">
                         <p class="option_text">Ánalisis de Datos Exploratorio</p>
-                    </a>
-                </div>
-                <div class="option">
+                </a>
+                <a  href="PCA" class="option">
                     <img src="{% static '/img/regresion-lineal.png' %}" alt="">
                     <p class="option_text">Ánalisis de Componentes Principales</p>
-                </div>
-                <div class="option">
+                </a>
+                <a  href="ArbolDecision" class="option">
                     <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
                     <p class="option_text">Árbol de Decisión</p>
-                </div>
-                <div class="option">
+                </a>
+                <a  href="BosqueAleatorio" class="option">
                     <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
                     <p class="option_text">Bosque Aleatorio</p>
-                </div>
-                <div class="option">
+                </a>
+                <a  href="K-Means" class="option">
                     <img src="{% static '/img/kmeans.png' %}" alt="" width=>
                     <p class="option_text">K-Means</p>
-                </div>
-
+                </a>
             </div>
         </aside>
         <div class="container">
