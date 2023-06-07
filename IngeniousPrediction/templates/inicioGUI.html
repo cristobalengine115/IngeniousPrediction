@@ -79,7 +79,7 @@
               </ul>
             {% endif %}
             <h1 style="font-size: 5rem;">Ingrese los datos del nuevo proyecto.</h1>
-            <form  method="post" action="registrarProyecto">
+            <form  method="post" action="registrarProyecto" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="row mb-4">
                 <div class="col">
@@ -102,8 +102,8 @@
                 </div>
 
                 <div class="form-outline mb-4">
-                  <label class="form-label labelGrande" for="form3Example4">Set de datos</label>
-                  <input type="file" name="project_Data">
+                  <label for="docProy" class="form-label">  DataFrame en formato CSV</label>
+                  <input class="form-control" type="file" id="docProy" name="project_data"  accept=".csv" required>
                 </div>
                 <br>
                 <br>

@@ -23,6 +23,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix,classification_repo
 from django.contrib import messages
 import plotly.express as px
 from plotly.offline import plot
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -62,14 +63,20 @@ def registrar(request):
 
 def registrarProyecto(request):
     if request.method == 'POST':
-        p_nombre = request.POST['project_Name']
-        p_url = request.POST['project_URL']
-        p_descripcion = request.POST['project_Desc']
-        p_data = request.POST['project_Data']
-        proyecto = Proyecto(nombre=p_nombre, descripcion=p_descripcion, URL=p_url, data=p_data)
-        proyecto.save()
-        print("usuario creado")
-        return redirect('inicioGUI')
+        p_Nombre = request.POST['project_Name']
+        p_Desc = request.POST['project_Desc']
+        p_URL = request.POST['project_URL']
+        p_data = request.FILES['project_data']
+        if p_Desc == '':
+            p_Desc = "Descripcion no proporcionada."
+        ext = os.path.splitext(p_data.name)[1]
+        print(ext)
+        valid_extensions = '.csv'
+        if not ext.lower() in valid_extensions:
+            return redirect('/ErrorProyecto')
+        else:
+            Proyecto.objects.create(name=p_Nombre, description=p_Desc, URL = p_URL, data = p_data)
+            return redirect('project_list')
 
 
 def inicioGUI(request):
@@ -145,6 +152,7 @@ def EDA(request,pk):
     
     #Comienzo del algoritmo
     df = pd.read_csv(source)
+    df = df.iloc[0:20000]
     df2 = df.iloc[np.r_[0:5, -5:0]]
     context['df'] = df2
     
@@ -336,14 +344,12 @@ def ArbolDecision(request,pk,algType):
     context = showDatos(pk)
     flag = bool
     context['type'] = algType
-
-    match algType:
-        case 'P':
-            context['AlgName'] = 'Pronostico'
-            flag = True
-        case 'C':
-            context['AlgName'] = 'Clasificacion'
-            flag = False
+    if algType == 'P':
+        context['AlgName'] = 'Pronostico'
+        flag = True
+    elif algType == 'C':
+        context['AlgName'] = 'Clasificacion'
+        flag = False
     context['flag'] = flag
     return render(request, 'ArbolDecision.html')
 
@@ -392,23 +398,22 @@ def ArbolDecisionext(request, pk, algType):
                                                                                     test_size = 0.2, 
                                                                                     random_state = 0,
                                                                                     shuffle = True)
-    match algType:
-        case 'P':
-            context['AlgName'] = 'Pronostico'
-            #Entrenamiento
-            ModeloAD = DecisionTreeRegressor(random_state=0)
+    if algType == 'P':
+        context['AlgName'] = 'Pronostico'
+        #Entrenamiento
+        ModeloAD = DecisionTreeRegressor(random_state=0)
+        
+        #Visualizacion de datos de prueba
+        Xtest = pd.DataFrame(X_dos)
+        context['Xtest'] = Xtest.iloc[np.r_[0:5, -5:0]]
+        
+        flag = True
             
-            #Visualizacion de datos de prueba
-            Xtest = pd.DataFrame(X_dos)
-            context['Xtest'] = Xtest.iloc[np.r_[0:5, -5:0]]
-            
-            flag = True
-            
-        case 'C':
-            context['AlgName'] = 'Clasificacion'
-            #Entrenamiento
-            ModeloAD = DecisionTreeClassifier(random_state=0)
-            flag = False
+    elif algType == 'C':
+        context['AlgName'] = 'Clasificacion'
+        #Entrenamiento
+        ModeloAD = DecisionTreeClassifier(random_state=0)
+        flag = False
 
     context['flag'] = flag
     
@@ -425,43 +430,41 @@ def ArbolDecisionext(request, pk, algType):
     ValoresOut = Valores2.rename(columns={Valores2.columns[0]: 'Prueba', Valores2.columns[1]: 'Pronostico'})
     context['Valores'] = ValoresOut.iloc[np.r_[0:5, -5:0]]
 
-    match algType:
-        case 'P':
+    if algType == 'P':
+        #Obtencion del ajuste de Bondad
+        Score = r2_score(Y_dos, Y_Pronostico)
+        context['Score'] = Score
 
-            #Obtencion del ajuste de Bondad
-            Score = r2_score(Y_dos, Y_Pronostico)
-            context['Score'] = Score
+        #Criterios
+        criterios = []
+        criterios.append(ModeloAD.criterion)
+        criterios.append(mean_absolute_error(Y_dos, Y_Pronostico))
+        criterios.append(mean_squared_error(Y_dos, Y_Pronostico))
+        criterios.append(mean_squared_error(Y_dos, Y_Pronostico, squared=False))
+        context['criterios'] = criterios
 
-            #Criterios
-            criterios = []
-            criterios.append(ModeloAD.criterion)
-            criterios.append(mean_absolute_error(Y_dos, Y_Pronostico))
-            criterios.append(mean_squared_error(Y_dos, Y_Pronostico))
-            criterios.append(mean_squared_error(Y_dos, Y_Pronostico, squared=False))
-            context['criterios'] = criterios
+    elif algType=='C':
 
-        case 'C':
+        #Obtencion del ajuste de Bondad
+        Score = accuracy_score(Y_dos, Y_Pronostico)
+        context['Score'] = Score
 
-            #Obtencion del ajuste de Bondad
-            Score = accuracy_score(Y_dos, Y_Pronostico)
-            context['Score'] = Score
+        #Matriz de clasificacion
+        ModeloClasificacion1 = ModeloAD.predict(X_dos)
+        Matriz_Clasificacion1 = pd.crosstab(Y_dos.ravel(), 
+                                    ModeloClasificacion1, 
+                                    rownames=['Actual'], 
+                                    colnames=['Clasificación']) 
+        context['MClas']=Matriz_Clasificacion1
 
-            #Matriz de clasificacion
-            ModeloClasificacion1 = ModeloAD.predict(X_dos)
-            Matriz_Clasificacion1 = pd.crosstab(Y_dos.ravel(), 
-                                        ModeloClasificacion1, 
-                                        rownames=['Actual'], 
-                                        colnames=['Clasificación']) 
-            context['MClas']=Matriz_Clasificacion1
-
-            #Criterios
-            criterios = []
-            criterios.append(ModeloAD.criterion)
-            criterios.append(accuracy_score(Y_dos, Y_Pronostico))
-            context['criterios'] = criterios
-            ReporteC =classification_report(Y_dos, Y_Pronostico, output_dict=True)
-            RepClas = pd.DataFrame(ReporteC).transpose()
-            context['ReporteClas'] = RepClas         
+        #Criterios
+        criterios = []
+        criterios.append(ModeloAD.criterion)
+        criterios.append(accuracy_score(Y_dos, Y_Pronostico))
+        context['criterios'] = criterios
+        ReporteC =classification_report(Y_dos, Y_Pronostico, output_dict=True)
+        RepClas = pd.DataFrame(ReporteC).transpose()
+        context['ReporteClas'] = RepClas         
 
     #Dataframe de la importancia de variables
     Importancia = pd.DataFrame({'Variable': list(NuevaMat[predictoras]),
@@ -495,18 +498,16 @@ def ArbolDecisionext2(request,pk, algType):
                                                                         random_state = 0, 
                                                                         shuffle = True)
     
-    match algType:
-        case 'P':
-            context['AlgName'] = 'Pronostico'
-            #Entrenamiento
-            ModeloAD = DecisionTreeRegressor(random_state=0)            
-            flag = True
-            
-        case 'C':
-            context['AlgName'] = 'Clasificacion'
-            #Entrenamiento
-            ModeloAD = DecisionTreeClassifier(random_state=0)
-            flag = False
+    if algType == 'P':
+        context['AlgName'] = 'Pronostico'
+        #Entrenamiento
+        ModeloAD = DecisionTreeRegressor(random_state=0)            
+        flag = True
+    elif algType == 'c':
+        context['AlgName'] = 'Clasificacion'
+        #Entrenamiento
+        ModeloAD = DecisionTreeClassifier(random_state=0)
+        flag = False
 
     context['flag'] = flag
     
@@ -528,13 +529,12 @@ def BosqueAleatorio(request,pk,algType):
     flag = bool
     context['type'] = algType
 
-    match algType:
-        case 'P':
-            context['AlgName'] = 'Pronostico'
-            flag = True
-        case 'C':
-            context['AlgName'] = 'Clasificacion'
-            flag = False
+    if algType == 'P':
+        context['AlgName'] = 'Pronostico'
+        flag = True
+    elif algType == 'C':
+        context['AlgName'] = 'Clasificacion'
+        flag = False
     context['flag'] = flag
     return render(request, 'BosqueAleatorio.html', context)
 
@@ -584,23 +584,22 @@ def BosqueAleatorioext(request, pk, algType):
                                                                                     test_size = 0.2, 
                                                                                     random_state = 0,
                                                                                     shuffle = True)
-    match algType:
-        case 'P':
-            context['AlgName'] = 'Pronostico'
-            #Entrenamiento
-            ModeloBA = RandomForestRegressor(random_state=0)
+    if algType=='P':
+        context['AlgName'] = 'Pronostico'
+        #Entrenamiento
+        ModeloBA = RandomForestRegressor(random_state=0)
+        
+        #Visualizacion de datos de prueba
+        Xtest = pd.DataFrame(X_dos)
+        context['Xtest'] = Xtest.iloc[np.r_[0:5, -5:0]]
+        
+        flag = True
             
-            #Visualizacion de datos de prueba
-            Xtest = pd.DataFrame(X_dos)
-            context['Xtest'] = Xtest.iloc[np.r_[0:5, -5:0]]
-            
-            flag = True
-            
-        case 'C':
-            context['AlgName'] = 'Clasificacion'
-            #Entrenamiento
-            ModeloBA = RandomForestClassifier(random_state=0)
-            flag = False
+    elif algType=='C':
+        context['AlgName'] = 'Clasificacion'
+        #Entrenamiento
+        ModeloBA = RandomForestClassifier(random_state=0)
+        flag = False
 
     context['flag'] = flag
     
@@ -617,43 +616,41 @@ def BosqueAleatorioext(request, pk, algType):
     ValoresOut = Valores2.rename(columns={Valores2.columns[0]: 'Prueba', Valores2.columns[1]: 'Pronostico'})
     context['Valores'] = ValoresOut.iloc[np.r_[0:5, -5:0]]
 
-    match algType:
-        case 'P':
+    if algType=='P':
+        #Obtencion del ajuste de Bondad
+        Score = r2_score(Y_dos, Y_Pronostico)
+        context['Score'] = Score
 
-            #Obtencion del ajuste de Bondad
-            Score = r2_score(Y_dos, Y_Pronostico)
-            context['Score'] = Score
+        #Criterios
+        criterios = []
+        criterios.append(ModeloBA.criterion)
+        criterios.append(mean_absolute_error(Y_dos, Y_Pronostico))
+        criterios.append(mean_squared_error(Y_dos, Y_Pronostico))
+        criterios.append(mean_squared_error(Y_dos, Y_Pronostico, squared=False))
+        context['criterios'] = criterios
 
-            #Criterios
-            criterios = []
-            criterios.append(ModeloBA.criterion)
-            criterios.append(mean_absolute_error(Y_dos, Y_Pronostico))
-            criterios.append(mean_squared_error(Y_dos, Y_Pronostico))
-            criterios.append(mean_squared_error(Y_dos, Y_Pronostico, squared=False))
-            context['criterios'] = criterios
+    elif algType=='C':
 
-        case 'C':
+        #Obtencion del ajuste de Bondad
+        Score = accuracy_score(Y_dos, Y_Pronostico)
+        context['Score'] = Score
 
-            #Obtencion del ajuste de Bondad
-            Score = accuracy_score(Y_dos, Y_Pronostico)
-            context['Score'] = Score
+        #Matriz de clasificacion
+        ModeloClasificacion1 = ModeloBA.predict(X_dos)
+        Matriz_Clasificacion1 = pd.crosstab(Y_dos.ravel(), 
+                                    ModeloClasificacion1, 
+                                    rownames=['Actual'], 
+                                    colnames=['Clasificación']) 
+        context['MClas']=Matriz_Clasificacion1
 
-            #Matriz de clasificacion
-            ModeloClasificacion1 = ModeloBA.predict(X_dos)
-            Matriz_Clasificacion1 = pd.crosstab(Y_dos.ravel(), 
-                                        ModeloClasificacion1, 
-                                        rownames=['Actual'], 
-                                        colnames=['Clasificación']) 
-            context['MClas']=Matriz_Clasificacion1
-
-            #Criterios
-            criterios = []
-            criterios.append(ModeloBA.criterion)
-            criterios.append(accuracy_score(Y_dos, Y_Pronostico))
-            context['criterios'] = criterios
-            ReporteC =classification_report(Y_dos, Y_Pronostico, output_dict=True)
-            RepClas = pd.DataFrame(ReporteC).transpose()
-            context['ReporteClas'] = RepClas         
+        #Criterios
+        criterios = []
+        criterios.append(ModeloBA.criterion)
+        criterios.append(accuracy_score(Y_dos, Y_Pronostico))
+        context['criterios'] = criterios
+        ReporteC =classification_report(Y_dos, Y_Pronostico, output_dict=True)
+        RepClas = pd.DataFrame(ReporteC).transpose()
+        context['ReporteClas'] = RepClas         
 
     #Dataframe de la importancia de variables
     Importancia = pd.DataFrame({'Variable': list(NuevaMat[predictoras]),
@@ -688,18 +685,17 @@ def BosqueAleatorioext2(request,pk, algType):
                                                                         random_state = 0, 
                                                                         shuffle = True)
     
-    match algType:
-        case 'P':
-            context['AlgName'] = 'Pronostico'
-            #Entrenamiento
-            ModeloBA = RandomForestRegressor(random_state=0)
-            flag = True
-            
-        case 'C':
-            context['AlgName'] = 'Clasificacion'
-            #Entrenamiento
-            ModeloBA = RandomForestClassifier(random_state=0)
-            flag = False
+    if algType=='P':
+        context['AlgName'] = 'Pronostico'
+        #Entrenamiento
+        ModeloBA = RandomForestRegressor(random_state=0)
+        flag = True
+        
+    elif algType =='C':
+        context['AlgName'] = 'Clasificacion'
+        #Entrenamiento
+        ModeloBA = RandomForestClassifier(random_state=0)
+        flag = False
 
     ModeloBA.fit(X_train, Y_train)
     context['flag'] = flag

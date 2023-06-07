@@ -19,10 +19,10 @@
   {% for proyectos in proyectos %}
     <div class="col-sm-4 text-center mb-3">
       <div class="card h-100">
-        <h5 class="card-header">{{proyectos.Nombre}}</h5>
+        <h5 class="card-header">{{proyectos.name}}</h5>
         <div class="card-body">
           <h5 class="card-title">Descripcion del proyecto:</h5>
-          <p class="card-text">{{proyectos.descripcion}}</p>
+          <p class="card-text">{{proyectos.description}}</p>
         </div>
         <div class="card-footer">
           <a href="/eliminarProyecto/{{proyectos.pk}}" class="btn btn-danger btnEliminar"> <i class="bi bi-trash"></i> Eliminar </a>
