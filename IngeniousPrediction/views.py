@@ -51,6 +51,18 @@ def registrar(request):
             messages.error(request, "Contraseña no igual")
             return render(request,'index.html')
 
+def registrarProyecto(request):
+    if request.method == 'POST':
+        p_nombre = request.POST['project_Name']
+        p_url = request.POST['project_URL']
+        p_descripcion = request.POST['project_Desc']
+        p_data = request.POST['project_Data']
+        proyecto = Proyecto(nombre=p_nombre, descripcion=p_descripcion, URL=p_url, data=p_data)
+        proyecto.save()
+        print("usuario creado")
+        return redirect('inicioGUI')
+
+
 def inicioGUI(request):
     return render(request, 'inicioGUI.html')
 

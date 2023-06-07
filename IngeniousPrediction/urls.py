@@ -4,6 +4,7 @@ urlpatterns =[
     path('', views.index),
     path('validar', views.validar),
     path('registrar', views.registrar),
+    path('registrarProyecto', views.registrarProyecto),
     path('IngeniousPrediction', views.index, name="IngeniousPrediction"),
     path('inicioGUI', views.inicioGUI, name="inicioGUI"),
     path('EDA/<int:pk>', views.EDA, name="EDA"),
