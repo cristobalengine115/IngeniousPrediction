@@ -38,13 +38,64 @@
             </div>
         </nav>
     </header>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <div class="alert">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+            {{message}}
+        </div>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+    <dialog class="form-popup" id="myForm" style="display: none;">
+        <form  method="post" action="validar" class="form-container">
+            {% csrf_token %}
+            <h1 class="signintitle" >Iniciar Sesión</h1>
+
+            <label for="email" class="inputLogin"><b>Email</b></label>
+            <input type="text" placeholder="Ingresa correo electrónico" name="email" required>
+
+            <label for="psw" class="inputLogin"><b>Contraseña</b></label>
+            <input type="password" placeholder="Ingresa contraseña" name="psw" required>
+
+            <button type="submit" class="btn">Iniciar Sesión</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Cerrar</button>
+        </form>
+    </dialog>
+
+    <dialog class="form-popup" id="myForm1" style="display: none;">
+        <form method="post"  action="registrar" class="form-container">
+            {% csrf_token %}
+            <h1 class="signintitle">Registrese</h1>
+            <label for="nombre" class="inputLogin"><b>Nombres</b></label>
+            <input type="text" placeholder="Ingresa tu nombre" name="nombre" required>
+
+            <label for="apellidos" class="inputLogin"><b>Apellidos</b></label>
+            <input type="text" placeholder="Ingresa tus apellidos" name="apellidos" required>
+
+            <label for="correo" class="inputLogin"><b>Correo Electrónico</b></label>
+            <input type="text" placeholder="Ingresa tu correo electrónico" name="correo" required>
+
+            <label for="psw" class="inputLogin"><b>Ingrese Contraseña</b></label>
+            <input type="password" placeholder="Ingresa una contraseña" name="psw" required>
+
+            <label for="pswCon" class="inputLogin"><b>Confirme Contraseña</b></label>
+            <input type="password" placeholder="Repite la contraseña" name="pswCon" required>
+
+            <button type="submit" class="btn">Registrarse</button>
+            <button type="button" class="btn cancel" onclick="closeForm1()">Cerrar</button>
+        </form>
+    </dialog>
+
     <section class="login">
         <div class="login_info">
             <h1 class="login_title">¡Bienvenido a Ingenious Prediction!</h1>
             <p class="login_text">Una nueva manera de administrar y usar los datos de los estudiantes para mejorar su camino en el aprendizaje.</p>
             <div class="login_buttons">
-                <a class="btn" href="#" role="button" style="background-color: #38B6FF; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem;">Inicia Sesión</a>
-                <a class="btn" href="#precios" role="button" style="background-color: #FCDC05; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; ">Regístrate</a>
+                <a class="btn" href="#" onclick="openForm()" role="button" style="background-color: #38B6FF; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem;">Inicia Sesión</a>
+                <a class="btn" href="#" onclick="openForm1()" role="button" style="background-color: #FCDC05; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: 3rem; ">Regístrate</a>
             </div>
         </div>
         
@@ -59,24 +110,23 @@
             <p class="nosotros_text">Un sitio web para el control, administración, seguimiento, segmentación, clasificación y predicción del historial  académico de los alumnos. Su propósito es, por medio del registro académico, poder descubrir qué métodos de enseñanza y qué estrategias de aprendizaje usar con qué estudiantes en qué situación. Tenemos como base tres ejes de acción:</p>
 		</div>
         <div class="actions">
-            <div class="card border-light mb-3">
-                <img src="{% static '/img/administra_datos.png' %}" class="card-img-top" alt="...">
-                <div class="card-body">
+            <div class="cardIP">
+                <img src="{% static '/img/administra_datos.png' %}" class="" alt="...">
+                <div class="">
                     <h5 class="card-title">Administra</h5>
                     <p class="card-text">A través de Ingenious Prediction podrás tener control total del desempeño de tus alumos.</p>
                 </div>
             </div>
-            <div class="card border-light mb-3" >
-                <img src="{% static '/img/procesa.png' %}" class="card-img-top" alt="...">
-                <div class="card-body">
+            <div class="cardIP" >
+                <img src="{% static '/img/procesa.png' %}" class="" alt="...">
+                <div>
                     <h5 class="card-title">Procesa</h5>
                     <p class="card-text">Los datos servirán como materia prima para nuevos modelos de conocimiento.</p>
                 </div>
             </div>
-
-            <div class="card border-light mb-3" >
-                <img src="{% static '/img/usa.png' %}" class="card-img-top" alt="...">
-                <div class="card-body">
+            <div class="cardIP" >
+                <img src="{% static '/img/usa.png' %}" class="" alt="...">
+                <div class="">
                     <h5 class="card-title">Aplica</h5>
                     <p class="card-text">Cada modelo obtenido te servirá para segmentar, clasificar o pronósticar sobre el camino que deben seguir tus estudiantes.</p>
                 </div>
@@ -86,16 +136,16 @@
 	</section>
     <footer class="text-center text-white footer" style="background-color: #AAD7FD;";>
         <div class="social-media">
-            <a class="btn text-white btn-floating m-1" style="background-color: #3b5998; width: 5rem; height: 5.1rem;" href="#!" role="button">
+            <a class="btn text-white " style="background-color: #3b5998; width: 5rem; height: 5.1rem;" href="#!" role="button">
                 <i class="fa fa-facebook-f fa-4x"></i>
             </a>
-            <a class="btn text-white btn-floating m-1" style="background-color: #55acee;" href="#!" role="button">
+            <a class="btn text-white btn-floating" style="background-color: #55acee; width: 5rem; height: 5.1rem;" href="#!" role="button">
                 <i class="fa fa-twitter fa-4x"></i>
             </a>
-            <a class="btn text-white btn-floating m-1" style="background-color: #ac2bac;" href="#!" role="button">
+            <a class="btn text-white btn-floating" style="background-color: #ac2bac; width: 5rem; height: 5.1rem;" href="#!" role="button">
                 <i class="fa fa-instagram fa-4x"></i>
             </a>
-            <a class="btn text-white btn-floating m-1" style="background-color: #333333;" href="#!" role="button">
+            <a class="btn text-white btn-floating " style="background-color: #333333; width: 5rem; height: 5.1rem;" href="#!" role="button">
                 <i class="fa fa-github fa-4x"></i>
             </a>
         </div>
@@ -104,5 +154,6 @@
     </div>
   </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="{% static '/scripts/main.js' %}"></script>
 </body>
 </html>

@@ -19,9 +19,10 @@
             <p class="title_GUI">INGENIOUS PREDICTION</p>
             <div class="menu_main">
                 <div class="option">
-                    <img src="{% static '/img/lupa.png' %}" alt="">
-                    <p class="option_text">Ánalisis de Datos Exploratorio</p>
-
+                    <a href="#">
+                        <img src="{% static '/img/lupa.png' %}" alt="">
+                        <p class="option_text">Ánalisis de Datos Exploratorio</p>
+                    </a>
                 </div>
                 <div class="option">
                     <img src="{% static '/img/regresion-lineal.png' %}" alt="">
@@ -29,23 +30,28 @@
                 </div>
                 <div class="option">
                     <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
-                    <p class="option_text">Árboles de Decisión</p>
+                    <p class="option_text">Árbol de Decisión</p>
                 </div>
                 <div class="option">
                     <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
-                    <p class="option_text">Árboles de Decisión</p>
+                    <p class="option_text">Bosque Aleatorio</p>
                 </div>
+                <div class="option">
+                    <img src="{% static '/img/kmeans.png' %}" alt="" width=>
+                    <p class="option_text">K-Means</p>
+                </div>
+
             </div>
         </aside>
         <div class="container">
             <div class="header_GUI right">
                 <div class="actions_GUI">
                     <div class="load">
-                        <img src="{% static '/img/subir.png' %}" alt="">
+                        <img src="{% static '/img/subir.png' %}" alt="Cargar">
                         <p class="textload">Subir Datos</p>
                     </div>
                     <div class="load">
-                        <img src="{% static '/img/descargar.png' %}" alt="">
+                        <img src="{% static '/img/descargar.png' %}" alt="Descargar">
                         <p class="textload">Descargar Datos"</p>
                     </div>
                     
@@ -55,11 +61,19 @@
                 </div>
             </div>
             <div class="workloads">
+                {% block body %}
+            
+                {% endblock %}
+                
+                {% block scripts %}
+
+                {% endblock %}
             <h1>Paso 1</h1>
-                {{eda}}
+                
             </div>
         </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>

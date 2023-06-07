@@ -1,0 +1,330 @@
+/* Variables para el proyecto*/
+@import url('https://fonts.googleapis.com/css2?family=Jost&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis&display=swap');
+:root{
+    /*Colores*/
+    --azul: #38B6FF;
+    --amarillo: #FCDC05;
+    --blanco: #fff;
+
+    /*Fuentes*/
+    --textos: 'Jost', sans-serif;
+    --titleGUI: 'Cherry Bomb One', cursive;
+    --textOption: 'Dosis', sans-serif;
+}
+
+/* Globales */
+html{
+    font-size: 62.5%;
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+img {
+
+    height: auto;
+  
+    max-width: 100%;
+  
+  }
+
+  a{
+    color: inherit;
+    text-decoration: none;
+  }
+
+/* Header */
+.headerIP{
+    width: auto;
+    height: auto;
+    background-color: var(--azul);
+    display: flex;
+}
+.logo img{
+    height: 100%;
+    width: 100%;
+}
+.logo{
+    padding-left: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    width: 6rem;
+    height: 7rem;
+}
+
+.navText{
+    font-size: 2rem;
+    color: var(--blanco);
+    margin-right: 5rem;
+}
+.navIP{
+    background-color: var(--azul);
+}
+.nav-item a{
+    color: var(--blanco);
+    font-size: 1.7rem;
+}
+.nav-item a:hover{
+    color: var(--blanco);
+}
+.itemIP{
+    margin-left: 1rem;
+}
+
+/* Login */
+.login{
+    display: flex;
+    margin-top: 5rem;
+    margin-left: 5rem;
+    height: 30rem;
+}
+
+.login_title{
+    width: 100%;
+    text-align: center;
+    font-size: 4rem;
+}
+.login_text {
+    text-align: center;
+    width: 80%;
+    font-size: 2.2rem;
+    margin-left: 5rem;
+    font-family: var(--textos);
+    font-weight: 1000;
+}
+.login_buttons{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-left: 10rem;
+    margin-top: 3rem;
+    width: 75%;
+    gap: 10rem;
+}
+.login_buttons a{
+    font-size: 2rem;
+}
+.login_logo{
+    margin-right:10rem;
+    
+}
+.login_logo img{
+    width: 100%;
+    height: 100%;
+}
+  
+  /* The popup form - hidden by default */
+
+  /* Add styles to the form container */
+.form-container {
+    max-width: 70rem;
+    padding: 10px;
+    background-color: white;
+}
+.form-popup{
+    -webkit-box-shadow:  0px 0px 0px 9999px rgba(0, 0, 0, 0.5);
+    box-shadow:  0px 0px 0px 9999px rgba(0, 0, 0, 0.7);
+}
+  /* Full-width input fields */
+  .form-container input[type=text], .form-container input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+  
+  /* When the inputs get focus, do something */
+  .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+  
+  /* Set a style for the submit/login button */
+  .form-container .btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+  }
+  
+  /* Add a red background color to the cancel button */
+  .form-container .cancel {
+    background-color: red;
+  }
+  
+  /* Add some hover effects to buttons */
+  .form-container .btn:hover, .open-button:hover {
+    opacity: 1;
+  }
+
+
+
+/* Acerca de nosotros */
+.actions{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 4rem 15rem;
+    align-items: center;
+    justify-items: center;
+}
+.nosotros{
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.nosotros_head{
+    font-size: 4rem;
+}
+
+.nosotros_text{
+    font-family: var(--textos);
+    font-size: 2rem;
+    margin: 0 20rem;
+    text-align: center;
+}
+.cardIP{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 80%;
+    padding: 3rem 3rem;
+}
+.cardIP:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+.card-title{
+    font-size: 3rem;
+    text-align: center;
+}
+.card-text{
+    font-family: var(--textos);
+    font-size: 1.5rem;
+}
+.social-media{
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    height: 5rem;
+    padding-top: 3rem;
+    padding-bottom: 7rem;
+}
+/*  Estilos para la parte de la GUI*/
+.right {
+    flex-grow: 1;
+}
+.headerAside{
+    display: flex;
+}
+.aside_main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+    height: 100%;
+    background-color: var(--azul);
+
+}
+.aside_main img{
+    margin-top: 2rem;
+    width: 25%;
+    height: 25%;
+}
+.title_GUI{
+    font-family: var(--titleGUI);
+    color: var(--blanco);
+    font-size: 2rem;
+    text-align: center;
+}
+.option{
+    display: flex;
+    margin-top: 5rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    margin: auto;
+    max-width: 100%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}
+.option_text{
+    text-decoration: none;
+}
+
+.option:hover {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    animation-name: example;
+    animation-duration: 0.25s;
+    border-left: 8px solid var(--amarillo);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+.option_text{
+    font-family: var(--textOption);
+    font-size: 2rem;
+    text-align: center;
+    
+}
+.container{
+    margin: 0;
+    padding: 0 ;
+}
+.header_GUI{
+    display: flex;
+    background-color: var(--amarillo);
+    margin: 0;
+}
+
+.actions_GUI{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 5rem;
+    padding: 3rem 5rem;
+    width: auto;
+}
+.actions_GUI img{
+    width: auto;
+    height: 10rem;
+}
+.load{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+}
+.load:hover{
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(10);
+    transform: scale(1.2);
+}
+
+.textload{
+    font-size: 2rem;
+    text-align: center;
+}
+.infoGUI{
+    font-size: 5rem;
+    display: flex;
+    align-items: center;
+    ;
+}
+
+
+.open-button {
+    background-color: #555;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    opacity: 0.8;
+    position: fixed;
+    bottom: 23px;
+    right: 28px;
+    width: 28rem;
+}
