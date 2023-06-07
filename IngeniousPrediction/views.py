@@ -2,7 +2,7 @@ import email
 from django.shortcuts import render, redirect
 # from .models import Profesor
 
-from .models import Proyecto
+from .models import Profesor, Proyecto
 import os
 #Dependencias analisis
 #%matplotlib inline       
@@ -14,12 +14,9 @@ import seaborn as sns                   # Para la visualización de datos basado
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler, MinMaxScaler  
 from django.contrib import messages
-
 import plotly.express as px
 from plotly.offline import plot
 
-#from IngeniousPrediction.models import Profesor
-#source = "IngeniousPrediction/data/melb_data_uQl4GDv.csv"
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -30,12 +27,14 @@ def validar(request):
             profesor = Profesor.objects.get(email=request.POST['email'])
             print(profesor)
             messages.success(request, "Bienvenido")
-            return redirect('EDA')
+            return redirect('inicioGUI')
         except:
             messages.error(request, "Usuario No Encontrado")
             return render(request,'index.html')
         username= request.POST["email"]
         password = request.POST["psw"]
+
+
 def registrar(request):
     if request.method == 'POST':
         p_nombre = request.POST['nombre']
@@ -47,28 +46,14 @@ def registrar(request):
             profe = Profesor(nombre=p_nombre, apellido=p_apellido, email=p_correo, passwd=p_password1)
             profe.save()
             print("usuario creado")
-            return redirect('EDA')
+            return redirect('inicioGUI')
         else:
             messages.error(request, "Contraseña no igual")
             return render(request,'index.html')
-#def validar(request):
-    #if request.method == 'POST':
-        #print(request.POST['email'])
-        #profesor = Profesor.object.get(email=request.POST['email'])
-        # try:
-        #     profesor = Profesor.object.get(email=request.POST['email'])
-        #     print(profesor)
-        #     messages.success(request, "Bienvenido")
-        #     return render(request, 'EDA.html')
-        # except:
-        #     messages.error(request, "Usuario No Encontrado")
-        #     print("fallo")
-        #     return render(request, 'index.html')
-        # username= request.POST["email"]
-        # password = request.POST["psw"]
-        # 
-        #      
-        # 
+
+def inicioGUI(request):
+    return render(request, 'inicioGUI.html')
+
 def showDatos(pk):
     proyecto = Proyecto.objects.get(pk=pk)
     #source = "IngeniousPrediction/data/melb_data_uQl4GDv.csv"

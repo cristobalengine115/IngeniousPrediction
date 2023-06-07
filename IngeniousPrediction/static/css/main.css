@@ -225,18 +225,63 @@ img {
     display: flex;
 }
 .aside_main{
+    position: fixed;
+    overflow-y: scroll;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 20%;
     height: 100%;
     background-color: var(--azul);
+    z-index: 10;
+}
+.aside_main::-webkit-scrollbar {
+    position: absolute;
+    left: 3;
+ }
+.workloads{
+    position: absolute;
     
+    left: 0;
+    top: 0;
+    width: 69%;
+    margin-top: 10%;
+    margin-left: 25%;
+    margin-right: 100rem;
+
 }
 .aside_main img{
     margin-top: 2rem;
     width: 25%;
-    height: 25%;
+    height: 100%;
+}
+
+.header_GUI{
+    margin-left: 20%;
+    height: 15%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    background-color: var(--amarillo);
+}
+.header_GUI img{
+    width: 25%;
+    height: 100%;
+}
+
+.actions_GUI{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 5rem;
+    padding: 3rem 5rem;
+    width: auto;
+}
+.actions_GUI img{
+    width: auto;
+    height: 10rem;
 }
 .title_GUI{
     font-family: var(--titleGUI);
@@ -274,27 +319,7 @@ img {
     text-align: center;
     
 }
-.container{
-    margin: 0;
-    padding: 0 ;
-}
-.header_GUI{
-    display: flex;
-    background-color: var(--amarillo);
-    margin: 0;
-}
 
-.actions_GUI{
-    display: grid;
-    grid-template-columns: repeat(2,1fr);
-    gap: 5rem;
-    padding: 3rem 5rem;
-    width: auto;
-}
-.actions_GUI img{
-    width: auto;
-    height: 10rem;
-}
 .load{
     display: flex;
     flex-direction: column;
@@ -388,3 +413,4 @@ input{
   .closebtn:hover {
     color: black;
   }
+
