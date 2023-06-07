@@ -1,0 +1,86 @@
+{% extends 'guiMineria.html' %}
+{% load static %}
+
+{% block title %} mineGUI | Proyectos {% endblock %}
+
+{% block head %} 
+
+{% endblock %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+<div class="row mb-3">
+  <div>
+    <h1>Proyectos creados: </h1>
+    <p>Aqui encontrarás los proyectos que hayas creado y un boton para agregar un nuevo proyecto. ¡Animate!</p>
+  </div>    
+</div>
+<div class="row  justify-content-center mb-3">
+  {% for proyectos in proyectos %}
+    <div class="col-sm-4 text-center mb-3">
+      <div class="card h-100">
+        <h5 class="card-header">{{proyectos.Nombre}}</h5>
+        <div class="card-body">
+          <h5 class="card-title">Descripcion del proyecto:</h5>
+          <p class="card-text">{{proyectos.descripcion}}</p>
+        </div>
+        <div class="card-footer">
+          <a href="/eliminarProyecto/{{proyectos.pk}}" class="btn btn-danger btnEliminar"> <i class="bi bi-trash"></i> Eliminar </a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<div class="row justify-content-center">
+  <div class="col mb-3">
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearProyecto"><i class="bi bi-plus-circle"></i> Crear Proyecto</button>
+  </div>
+</div>  
+<!-- Modal -->
+<div class="modal fade" id="crearProyecto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="crearProyecto" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Crear Proyecto</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form class= "row g-3 needs-validation" method="POST" action="/creaProyecto/" enctype="multipart/form-data" novalidate>{% csrf_token %} 
+          <div class="col md-12 mb-3">
+            <label for="Nombre" class="form-label">Nombre del proyecto</label>
+            <input type="text" class="form-control" id="Nombre" name="Nombre" placeholder="Ej. Prueba EDA" autocomplete="off" required>
+            <div class="invalid-feedback">
+              <strong>El proyecto debe tener un nombre</strong>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="Desc" class="form-label">Descripcion del proyecto</label>
+            <textarea class="form-control" id="Desc" name="descripcion" rows="3"></textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="docProy" class="form-label">  DataFrame en formato CSV</label>
+            <input class="form-control" type="file" id="docProy" name="data"  accept=".csv" required>
+            <div class="invalid-feedback">
+              <strong>Debes proporcionar un archivo</strong>
+            </div>
+          </div>
+
+        <div class="col sm-4">
+          <button type="submit" class="btn btn-primary">Crear proyecto</button>
+        </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

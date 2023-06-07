@@ -74,8 +74,175 @@
                 {{data}}
             </div>
         </div>
+      </div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-</body>
-</html>
+    <div class="col-md-6 col-sm-12 mb-3">
+      <div class="card  h-100">
+        <div class="card-body">
+          <h5 class="card-title">Paso 2: Datos faltantes</h5>
+          <h6 class="card-title">Cantidad de datos nulos por variable:</h6>
+          <ul>
+            {% for columna in nulos %}  
+            <li>{{columna}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="row my-4">
+  <div class="col-sm-12 mb-2">
+    <h5>Paso 3: Detección de valores atípicos</h5>
+    <h6>1) Distribucion de variables numéricas:</h6>
+  </div>
+  {% for fig in plot_div %}
+  <div class="col-md-6 col-sm-12 mb-3">
+    <div class="card">
+      <div class="card-body">
+          {%  autoescape off %}
+          {{ fig }}
+          {% endautoescape %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="col-sm-12 mb-3">
+    <h6>2) Resumen estadístico de variables numéricas:</h6>
+    <div class="table-responsive">
+      <table class="table  table-striped table-bordered table-hover">
+        <tr>
+          <th>
+
+          </th>
+          {% for col in df3.columns %}
+            <th>
+              <strong>{{col}}</strong>
+            </th>
+          {% endfor %}
+        </tr>
+          {% for index, row in df3.iterrows %}
+            <tr>
+              <th>
+                <strong>{{index}}</strong>
+              </th>
+              {% for cell in row %}
+                <td>
+                  {{cell}}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+      </table>
+    </div>
+  </div>
+  
+  <div class="col-sm-12 my-2">
+    <h6>3) Diagramas para detectar posibles valores atípicos:</h6>
+  </div>  
+  
+  {% for fig in diagramsCaja %}
+  <div class="col-md-6 col-sm-12 mb-3">
+    <div class="card">
+      <div class="card-body">
+          {%  autoescape off %}
+          {{ fig }}
+          {% endautoescape %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}  
+
+  {% if flag %}
+  <h6>4) Distribución de variables categóricas:</h6>
+  <div class="table-responsive">
+    <table class="table  table-striped table-bordered table-hover">
+      <tr>
+        <th>  
+        </th>
+        {% for col in df4.columns %}
+          <th>
+            {{col}}
+          </th>
+        {% endfor %}
+      </tr>
+        {% for index, row in df4.iterrows %}
+          <tr>
+            <th>
+              {{index}}
+            </th>
+            {% for cell in row %}
+              <td>
+                {{cell}}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+    </table>
+  </div>
+
+    {% for fig in Cat %}
+    <div class="col-sm-6">
+      {% autoescape off %}
+      {{ fig }}
+      {% endautoescape %}
+    </div>
+    {% endfor %}
+    <div class="col-sm-12 my-4">
+      <h6>5)  Agrupación por variables categóricas</h6>
+      {% for i in groups %}
+      <div class="table-responsive mb-3">
+        <table class="table  table-striped table-bordered table-hover">
+          <tr>
+            <th>
+
+            </th>
+            {% for col in i.columns %}
+              <th>
+                <strong>{{col}}</strong>
+              </th>
+            {% endfor %}
+          </tr>
+            {% for index, row in i.iterrows %}
+              <tr>
+                <th>
+                  <strong>{{index}}</strong>
+                </th>
+                {% for cell in row %}
+                  <td>
+                    {{cell}}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+        </table>
+      </div>
+      {% empty %}
+        <h5> Parece que no existen variables categoricas con menos de 10 elementos unicos.</h5>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+</div>
+
+<div class="row my-4">
+  <div class="col-sm-12">
+    <h5> Paso 4:  Identificación de relaciones entre pares variables</h5>
+    <h6>Mapa de calor de correlaciones:</h6>
+    {%  autoescape off %}
+    {{ mapaC }}
+    {% endautoescape %}
+  </div>
+  
+  <div class="col">
+    <a class="btn btn-success" href="/Selector/EDA"> Finalizar Algoritmo y volver al selector</a>
+  </div>
+
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %} 
