@@ -1,0 +1,57 @@
+{% extends "guiMineria.html" %}
+{% load static %}
+
+{% block title %} IngeniousPrediction | Bosques Aleatorios: {{AlgName}}-3 {% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-xs-12">
+    <h1>Arboles de decision: {{AlgName}}</h1>
+  </div>
+</div>
+
+<div class="row my-4">
+  <h5>DataFrame de los datos ingresados:</h5>
+  <div class="table-responsive">
+    <table class="table  table-striped table-bordered table-hover">
+      <tr>
+        <th>
+
+        </th>
+        {% for col in DfN.columns %}
+          <th>
+            <strong>{{col}}</strong>
+          </th>
+        {% endfor %}
+      </tr>
+        {% for index, row in DfN.iterrows %}
+          <tr>
+            <th>
+              <strong>{{index}}</strong>
+            </th>
+            {% for cell in row %}
+              <td>
+                {{cell}}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+    </table>
+  </div>
+</div>
+
+
+<div class="row my-4">
+  <p> <b>Nuevo pronostico:</b> <br>{{resultado.0}}</p>  
+</div>
+
+<div class="col py-1">
+  <a class="btn btn-secondary" href="/BA/{{pk}}/{{type}}"> Volver a comenzar algoritmo</a>
+  <a class="btn btn-success" href="/Selector/BA"> Finalizar</a>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{% endblock %} 
