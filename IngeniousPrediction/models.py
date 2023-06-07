@@ -3,6 +3,13 @@ from django.core import validators
 
 
 
+
+class Profesor(models.Model):
+    nombre = models.CharField(max_length=200)
+    apellido = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    passwd = models.CharField(max_length=200)
+
 class Proyecto(models.Model):
     name = models.CharField(max_length=80)
     description = models.CharField(max_length=200)
