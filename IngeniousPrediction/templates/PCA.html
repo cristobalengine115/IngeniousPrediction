@@ -1,18 +1,18 @@
-{% extends "base.html" %}
+{% extends "guiMineria.html" %}
 {% load static %}
 
-{% block title %} mineGUI | PCA {% endblock %}
+{% block title %} Ingenious Prediction | PCA {% endblock %}
 
 {% block body %}
 <div class="row">
   <div class="col-xs-12">
-    <h1>PCA</h1>
-    <h5>DataFrame ingresado:</h5>
+    <h1 style="font-size: 3rem;">PCA</h1>
+    <h5 style="font-size: 2rem;">DataFrame ingresado:</h5>
   </div>
 </div>
-<div class="table-responsive">
-  <table class="table  table-striped table-bordered table-hover">
-    <caption> {{size.0}} rows x {{size.1}} columns</caption>
+<div class="table-responsive ">
+  <table class="table  table-striped table-bordered table-hover table-dark">
+    <caption style="font-size: 2rem;"> {{size.0}} rows x {{size.1}} columns</caption>
       <tr class="">
         <th>
           #
@@ -43,47 +43,51 @@
     <h5> Paso 1: Evidencia de variables posiblemente correlacionadas.</h5>
     <!-- <p>Dataframe de las correlaciones:</p> -->
   </div>
-<!-- 
-  <div class="table-responsive">
-    <table class="table  table-striped table-bordered table-hover">
-      <tr class="">
-        <th>
-    
-        </th>
-        {% for col in corr.columns %}
-          <th>
-            {{col}}
-          </th>
+  <div class="card">
+    <div class="card-header" style="font-size: 3rem;">
+      Paso 1: 
+    </div>
+    <div class="card-body">
+      <h5 class="card-title" style="text-align: left;">Evidencia de variables posiblemente correlacionadas.</h5>
+      <h5 class="card-title" style="text-align: left;">Mapa de calor de correlaciones:</h5>
+      <ul class='list-group'>
+        {% for columna in tipos %}  
+        <li class="list-group-item">{{columna}}</li>
         {% endfor %}
-      </tr>
-        {% for index, row in corr.iterrows %}
-          <tr>
-            <th>
-              {{index}}
-            </th>
-            {% for cell in row %}
-              <td>
-                {{cell}}
-              </td>
-            {% endfor %}
-          </tr>
-        {% endfor %}
-    </table>
-  </div> -->
+      </ul>
+      
+    </div>
+  </div>
+
+
 
   <div class="col-sm-12 mt-3">
-    <p>Mapa de calor de correlaciones:</p>
+    
     {%  autoescape off %}
     {{ mapaC }}
     {% endautoescape %}
   </div>
 </div>
 
-<div class="row my-4">
-  <div class="col-sm-12">
-    <h5> Paso 2: Se hace una estandarización de los datos.</h5>
-    <p>Dataframe de los datos estandarizados (Estandarizacion StandardScaler):</p>
+<div class="card">
+  <div class="card-header" style="font-size: 3rem;">
+    Paso 2: 
+  </div>
+  <div class="card-body">
+    <h5 class="card-title" style="text-align: left;">Se hace una estandarización de los datos.</h5>
+    <h5 class="card-title" style="text-align: left;">Dataframe de los datos estandarizados (Estandarizacion StandardScaler):</h5>
+    <ul class='list-group'>
+      {% for columna in tipos %}  
+      <li class="list-group-item">{{columna}}</li>
+      {% endfor %}
+    </ul>
+    
+  </div>
 </div>
+
+
+<div class="row my-4">
+  
 <div class="table-responsive">
   <table class="table  table-striped table-bordered table-hover">
       <tr>
@@ -112,39 +116,78 @@
   </div>
 </div>
 
-<div class="row my-4">
-  <div class="col-sm-12">
-    <h5> Pasos 3 y 4: Matriz de covarianzas o correlaciones y
-        Calculo de componentes y varianza.</h5>
+<div class="card">
+  <div class="card-header" style="font-size: 3rem;">
+    Paso 3 y Paso 4: 
   </div>
+  <div class="card-body">
+    <h5 class="card-title" style="text-align: left;">Matriz de covarianzas o correlaciones y
+      Calculo de componentes y varianza.</h5>
+    <h5 class="card-title" style="text-align: left;">Matriz de covarianza</h5>
+    <ul class='list-group'>
+      {% for columna in tipos %}  
+      <li class="list-group-item" style="font-size: 2rem;">{{columna}}</li>
+      {% endfor %}
+    </ul>
+    
+  </div>
+</div>
+
+
+<div class="row my-4">
   <div class="col">
-    <h6>Matriz de covarianza:</h6>
+    <h6>:</h6>
     {% for element in pca1 %}
     <p style="text-align: justify;"> {{element}} </p>
     {% endfor %}
   </div>
 </div>
 
+<div class="card">
+  <div class="card-header" style="font-size: 3rem;">
+    Paso 5: 
+  </div>
+  <div class="card-body">
+    <h5 class="card-title" style="text-align: left;">Se decide el número de componentes principales.</h5>
+    <ul class='list-group'>
+      {% for columna in tipos %}  
+      <li class="list-group-item">{{columna}}</li>
+      {% endfor %}
+    </ul>
+    
+  </div>
+</div>
+<h5 class="card-title" style="text-align: left;">Proporcion de varianza</h5>
+    <p style="text-align: justify; font-size: 2rem;">{{Var}}</p>
+
+<h5 class="card-title" style="text-align: left;">Varianza acumulada</h5>
+<p style="text-align: justify; font-size: 2rem;">{{VarAc}}</p>
 <div class="row my-4">
   <div class="col-sm-12">
-    <h5> Paso 5: Se decide el número de componentes principales.</h5>
-    <h5>Proporcion de varianza:</h5>
-      <p style="text-align: justify;">{{Var}}</p>
-    <h5>Varianza acumulada </h5> 
-    <h6>La mejor varianza acumulada fue con {{nComp}} componentes y es la siguiente:</h6>
-      <p>{{ VarAc }}</p>
     
-    <h5>Grafica de varianza acumulada:</h5>
+    <h5 class="card-title" style="text-align: left;">Grafica de varianza acumulada:</h5>
       {%  autoescape off %}
       {{ figVar }}
       {% endautoescape %}
   </div>
 </div>
-
+<div class="card">
+  <div class="card-header" style="font-size: 3rem;">
+    Paso 6: 
+  </div>
+  <div class="card-body">
+    <h5 class="card-title" style="text-align: left;">Se examina la proporción de relevancias -cargas-</h5>
+    <h5 class="card-title" style="text-align: left;">Dataframe acotado y con valores absolutos</h5>
+    <ul class='list-group'>
+      {% for columna in tipos %}  
+      <li class="list-group-item">{{columna}}</li>
+      {% endfor %}
+    </ul>
+    
+  </div>
+</div>
 <div class="row my-4">
   <div class="col-sm-12">
-    <h5> Paso 6: Se examina la proporción de relevancias -cargas-</h5>
-    <h6>Dataframe acotado y con valores absolutos:</h6>
   </div>
   <div class="table-responsive">
     <table class="table  table-striped table-bordered table-hover">
@@ -175,15 +218,16 @@
   <div class="col-sm-12 mt-3">
     <div class="card py-2">
       <div class=" card-body">
-        <form  class="needs-validation" novalidate action="/PCA-2/{{pk}}" method="POST"> {% csrf_token %}
-          <h5>Selecciona las variables que deseas descartar: </h5>
+        <form  class="needs-validation" novalidate action="/PCA-2/{{pk}}" method="POST"> 
+          {% csrf_token %}
+          <h5 style="padding: 2rem; font-size: 2rem;">Selecciona las variables que deseas descartar: </h5>
           {% for col in ME.columns %}
           <div class="form-check form-check-inline">
             <input  class="form-check-input" type="checkbox" name="columnas" id="option:{{col}}" value={{col}} />
-            <label class="form-check-label" for="option:{{col}}"><b>{{col}}</b></label><br />
+            <label class="form-check-label" for="option:{{col}}" style="font-size: 2rem;"><b>{{col}}</b></label><br />
           </div>
           {% endfor %}
-          <br><button class="btn  btn-primary" type="submit">Siguiente</button>
+          <br><button class="btn  btn-primary" type="submit" style="padding: 2rem; font-size: 2rem;">Siguiente</button>
         </form>
       </div>
     </div>   

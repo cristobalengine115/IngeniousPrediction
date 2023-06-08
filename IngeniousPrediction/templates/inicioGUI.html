@@ -20,35 +20,28 @@
                 <p class="title_GUI">INGENIOUS PREDICTION</p>
             </a>  
             <div class="menu_main">
-                <a  href="EDA" class="option">
-                        <img src="{% static '/img/lupa.png' %}" alt="">
-                        <p class="option_text">Ánalisis de Datos Exploratorio</p>
-                </a>
-                <a  href="PCA" class="option">
-                    <img src="{% static '/img/regresion-lineal.png' %}" alt="">
-                    <p class="option_text">Ánalisis de Componentes Principales</p>
-                </a>
-                <a  href="ArbolDecision" class="option">
-                    <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
-                    <p class="option_text">Árbol de Decisión</p>
-                </a>
-                <a  href="BosqueAleatorio" class="option">
-                    <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
-                    <p class="option_text">Bosque Aleatorio</p>
-                </a>
-                <a  href="K-Means" class="option">
-                    <img src="{% static '/img/kmeans.png' %}" alt="" width=>
-                    <p class="option_text">K-Means</p>
-                </a>
-                <a  href="K-Means" class="option">
-                  <img src="{% static '/img/kmeans.png' %}" alt="" width=>
-                  <p class="option_text">K-Means</p>
+              <a  href="edaSelector" class="option">
+                      <img src="{% static '/img/lupa.png' %}" alt="">
+                      <p class="option_text">Ánalisis de Datos Exploratorio</p>
               </a>
-              <a  href="K-Means" class="option">
-                <img src="{% static '/img/kmeans.png' %}" alt="" width=>
-                <p class="option_text">K-Means</p>
-            </a>
-            </div>
+              <a  href="pcaSelector" class="option">
+                  <img src="{% static '/img/regresion-lineal.png' %}" alt="">
+                  <p class="option_text">Ánalisis de Componentes Principales</p>
+              </a>
+              <a  href="arbolSelector" class="option">
+                  <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
+                  <p class="option_text">Árbol de Decisión</p>
+              </a>
+              <a  href="bosqueSelector" class="option">
+                  <img src="{% static '/img/arbol-de-decisiones.png' %}" alt="">
+                  <p class="option_text">Bosque Aleatorio</p>
+              </a>
+              <a  href="segclaSelector" class="option">
+                  <img src="{% static '/img/kmeans.png' %}" alt="" width=>
+                  <p class="option_text">Segmentación y clasificación</p>
+              </a>
+          </a>
+          </div>
             <div class="header_GUI">
               <div class="actions_GUI">
                   <!-- <div class="load">
@@ -109,7 +102,7 @@
                 <br>
                 <button type="submit" class="btn btn-primary btn-block mb-10" style="width: 15rem; height: 6rem; font-size: 2rem;">Crear proyecto</button>
             </form>
-
+            
             {% block body %}
             
             {% endblock %}

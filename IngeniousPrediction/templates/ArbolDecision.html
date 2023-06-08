@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "guiMineria.html" %}
 {% load static %}
 
 {% block title %} IngeniousPrediction | Arboles de Decision: {{AlgName}} {% endblock %}
@@ -109,7 +109,7 @@
 <div class="col-sm-12 mb-3">
   <div class="card py-2">
     <div class=" card-body">
-      <form  class="needs-validation" novalidate action="/AD-2/{{pk}}/{{type}}" method="POST"> {% csrf_token %}
+      <form  class="needs-validation" novalidate action="/ArbolDecision_2/{{pk}}/{{type}}" method="POST"> {% csrf_token %}
         <h5>Selecciona las variables predictoras: </h5>
         {% for col in ME.columns %}
         <div class="form-check form-check-inline mt-2 mb-3">

@@ -1,12 +1,12 @@
 {% extends "guiMineria.html" %}
 {% load static %}
 
-{% block title %} Ingenious Prediction | Arboles de Decision: {{AlgName}} {% endblock %}
+{% block title %} IngeniousPrediction | Segmentacion y clasificacion {% endblock %}
 
 {% block body %}
 <div class="row">
   <div class="col-xs-12">
-    <h1>Arboles de Decision: {{AlgName}}</h1>
+    <h1>Segmentacion y clasificacion</h1>
   </div>
 </div>
 
@@ -27,7 +27,7 @@
         {% for index, row in DfN.iterrows %}
           <tr>
             <th>
-             <strong>{{index}}</strong>
+              <strong>{{index}}</strong>
             </th>
             {% for cell in row %}
               <td>
@@ -42,16 +42,16 @@
 
 
 <div class="row my-4">
-  <p> <b>Nuevo pronostico:</b> <br>{{resultado.0}}</p>  
+  <p> <b>Clasificacion:</b> <br>{{resultado.0}}</p>  
 </div>
 
 <div class="col py-1">
-  <a class="btn btn-secondary" href="/AD/{{pk}}/{{type}}"> Volver a comenzar algoritmo</a>
-  <a class="btn btn-success" href="/Selector/AD"> Finalizar</a>
+  <a class="btn btn-secondary" href="/SC/{{pk}}"> Volver a comenzar algoritmo</a>
+  <a class="btn btn-success" href="/Selector/SC"> Finalizar</a>
 </div>
 
 
 {% endblock %}
 
 {% block scripts %}
-{% endblock %}
+{% endblock %} 

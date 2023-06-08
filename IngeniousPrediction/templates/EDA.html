@@ -6,8 +6,8 @@
 {% block body %}
 
 <div class="row">
-    <h1 class="">Ánalisis de Datos Exploratorio (EDA)</h1>
-    <h5>DataFrame ingresado:</h5>
+    <h1 style="font-size: 3rem;">Ánalisis de Datos Exploratorio (EDA)</h1>
+    <h2>DataFrame ingresado:</h5>
   <div class="table-responsive">
     <table class="table  table-striped table-bordered table-hover table-dark">
       <tr>
@@ -33,10 +33,10 @@
           </tr>
         {% endfor %}
     </table>
-    <p> {{size.0}} rows x {{size.1}} columns</p>
+    <p style="font-size: 2rem;"> {{size.0}} rows x {{size.1}} columns</p>
   </div>
-  <h6>Forma del DataFrame</h6>
-  <p>({{size.0}}, {{size.1}})</p>
+  <h6 style="font-size: 2rem;">Forma del DataFrame</h6>
+  <p style="font-size: 2rem;">({{size.0}}, {{size.1}})</p>
 </div>
 
 

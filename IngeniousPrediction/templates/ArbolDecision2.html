@@ -273,7 +273,7 @@
   <div class="col-sm-12">
     <div class="card py-2">
       <div class=" card-body">
-        <form  class="needs-validation" novalidate action="/AD-3/{{pk}}/{{type}}" method="POST"> {% csrf_token %}
+        <form  class="needs-validation" novalidate action="/ArbolDecision_3/{{pk}}/{{type}}" method="POST"> {% csrf_token %}
           <h5>Selecciona los valores para el nuevo pronostico: </h5>
           {% for col in Pred.columns %}
           <div class="form-check">

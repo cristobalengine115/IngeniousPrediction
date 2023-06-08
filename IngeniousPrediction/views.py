@@ -1,3 +1,4 @@
+from cmd import IDENTCHARS
 from django.shortcuts import render, redirect
 
 from .models import Profesor, Proyecto
@@ -10,16 +11,17 @@ import matplotlib.pyplot as plt         # Para la generación de gráficas a par
 import plotly.express as px
 from plotly.offline import plot
 import seaborn as sns                   # Para la visualización de datos basado en matplotlib         
-
+from sklearn.cluster import KMeans
 from sklearn import model_selection
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, label_binarize
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix,classification_report,mean_squared_error, mean_absolute_error, r2_score
-
+from sklearn.metrics import accuracy_score, confusion_matrix,classification_report,mean_squared_error, mean_absolute_error, r2_score, roc_curve, auc
+from sklearn.tree import export_text
+from kneed import KneeLocator
 from django.contrib import messages
 import plotly.express as px
 from plotly.offline import plot
@@ -82,12 +84,60 @@ def registrarProyecto(request):
 def inicioGUI(request):
     return render(request, 'inicioGUI.html')
 
+def edaSelector(request):
+    if request.method == 'POST':
+        pk = request.POST.get('mis_proyectos')
+        return redirect('/EDA/'+pk)
+    proyectos = Proyecto.objects.all()
+    return render(request, 'edaSelector.html',{
+        'proyectos' : proyectos
+    })
+
+def pcaSelector(request):
+    if request.method == 'POST':
+        pk = request.POST.get('mis_proyectos')
+        return redirect('/PCA/'+pk)
+    proyectos = Proyecto.objects.all()
+    return render(request, 'pcaSelector.html',{
+        'proyectos' : proyectos
+    })
+
+def arbolSelector(request):
+    if request.method == 'POST':
+        pk = request.POST.get('mis_proyectos')
+        tipo = request.POST.get('mis_tareas')
+        return redirect('/ArbolDecision/'+pk+'/'+tipo)
+    proyectos = Proyecto.objects.all()
+    return render(request, 'arbolSelector.html',{
+        'proyectos' : proyectos
+    })
+
+def bosqueSelector(request):
+    if request.method == 'POST':
+        pk = request.POST.get('mis_proyectos')
+        tipo = request.POST.get('mis_tareas')
+        return redirect('/BosqueAleatorio/'+pk+'/'+tipo)
+    proyectos = Proyecto.objects.all()
+    return render(request, 'bosqueSelector.html',{
+        'proyectos' : proyectos
+    })
+
+def segclaSelector(request):
+    if request.method == 'POST':
+        pk = request.POST.get('mis_proyectos')
+        return redirect('/SegCla/'+pk)
+    proyectos = Proyecto.objects.all()
+    return render(request, 'segclaSelector.html',{
+        'proyectos' : proyectos
+    })
+
 def showDatos(pk):
     proyecto = Proyecto.objects.get(pk=pk)
+
     #source = "IngeniousPrediction/data/melb_data_uQl4GDv.csv"
     source = proyecto.data
     context = {}
-    context['pk'] = "Grafic"#pk
+    context['pk'] = pk #pk
     #Comienzo del algoritmo
     df = pd.read_csv(source)
     for i in range(df.shape[1]):
@@ -135,14 +185,14 @@ def showDatos(pk):
     mapaC = plot({'data': calor}, output_type='div')
     context['corr']=correlaciones
     context['mapaC'] = mapaC
-
+    context
     return(context) 
- 
+
+
 def GUI(request):
-    username = 'Eduardo uwu'
+    proyectos = Proyecto.objects.all()
     return render(request, 'guiMineria.html',{
-        'username' : username,
-        # 'data' : Planea
+        'proyectos' : proyectos
     })
 
 def EDA(request,pk):
@@ -247,7 +297,7 @@ def EDA(request,pk):
 
     return render(request, 'EDA.html', context)
 
-def PCA(request,pk):
+def PCA1(request,pk):
     proyecto = Proyecto.objects.get(pk=pk)
     source = proyecto.data
     context = {}
@@ -282,11 +332,12 @@ def PCA(request,pk):
     ME = pd.DataFrame(MEstandarizada, columns=NuevaMat.columns)
     ME2 = ME.iloc[np.r_[0:5, -5:0]]
     context['ME']=ME2
-
     #Instancia de componente PCA
     PCAOut = []
+
     pca = PCA(n_components=None)
-    pca.fit(MEstandarizada)     
+
+    pca.fit(MEstandarizada)   
     pcaPrint = pca.components_
     for data in pcaPrint:
         PCAOut.append(data)
@@ -325,6 +376,7 @@ def PCA(request,pk):
 
     return render(request, 'PCA.html',context)
 
+
 def PCA2(request, pk):
     proyecto = Proyecto.objects.get(pk=pk)
     colDrop = request.POST.getlist('columnas')
@@ -351,7 +403,7 @@ def ArbolDecision(request,pk,algType):
         context['AlgName'] = 'Clasificacion'
         flag = False
     context['flag'] = flag
-    return render(request, 'ArbolDecision.html')
+    return render(request, 'ArbolDecision.html', context)
 
 def ArbolDecisionext(request, pk, algType):
     proyecto = Proyecto.objects.get(pk=pk)
@@ -486,12 +538,14 @@ def ArbolDecisionext(request, pk, algType):
 
 def ArbolDecisionext2(request,pk, algType):
     context = {}
+    flag = bool
+    ModeloAD = any
     context['pk'] = pk
     context['type'] = algType
     Val = request.POST.getlist('Nvals')
     X = pd.read_csv(os.path.join(BASE_DIR, 'IngeniousPrediction/data/info/X.csv'))
     Y = pd.read_csv(os.path.join(BASE_DIR, 'IngeniousPrediction/data/info/Y.csv'))
-
+    print(X)
     #Division de los datos
     X_train, X_dos, Y_train, Y_dos = model_selection.train_test_split(X, Y, 
                                                                         test_size = 0.2, 
@@ -503,14 +557,12 @@ def ArbolDecisionext2(request,pk, algType):
         #Entrenamiento
         ModeloAD = DecisionTreeRegressor(random_state=0)            
         flag = True
-    elif algType == 'c':
+    elif algType == 'C':
         context['AlgName'] = 'Clasificacion'
         #Entrenamiento
         ModeloAD = DecisionTreeClassifier(random_state=0)
         flag = False
-
     context['flag'] = flag
-    
     ModeloAD.fit(X_train, Y_train)
 
     col = list(X.columns)
@@ -522,7 +574,7 @@ def ArbolDecisionext2(request,pk, algType):
     resultado = ModeloAD.predict(Npron)
     context['resultado'] = resultado
 
-    return render(request, 'Arboles/ArbolDecision3.html', context)
+    return render(request, 'ArbolDecision3.html', context)
 
 def BosqueAleatorio(request,pk,algType):
     context = showDatos(pk)
@@ -710,37 +762,244 @@ def BosqueAleatorioext2(request,pk, algType):
     resultado = ModeloBA.predict(Npron)
     print(resultado)
     context['resultado'] = resultado
-
     return render(request, 'BosqueAleatorio3.html', context)
 
+def SegClas(request, pk):
+    context = showDatos(pk)
+    return render(request, 'Clusters.html', context)
 
-def KMeans(request,pk):
-    return render(request, 'K-Means.html')
+def SegClas_2(request, pk):
+    proyecto = Proyecto.objects.get(pk=pk)
+    context = {}
+    context['pk'] = pk
+    #Obtencion de Var Cat y Pred
+    Elim = request.POST.getlist('Elim')
+    Modelo = request.POST.getlist('Modelo')
+    
+    #verificar que no hayas elegido la misma columna en ambos y que se haya escogido al menos una variable predictora
+    for i in range (len(Modelo)):
+        for j in range (len(Elim)):
+            if(Modelo[i] == Elim[j]):
+                return redirect('/SCError/{}'.format(pk))
+    
+    if( len(Modelo) <= 2):
+        return redirect('/SCError/{}'.format(pk))
+
+    #Paso usual
+    source = proyecto.data
+    df = pd.read_csv(source)
+    df = df.iloc[0:20000]
+    for i in range(df.shape[1]):
+        df.columns.values[i] = df.columns.values[i].replace(" ","_")
+    
+    #Limpiamos y especificamos las variables del modelo
+    NuevaMatriz = df.drop(columns=Elim)
+    MatrizDef = NuevaMatriz[Modelo]
+    NuevaMat = MatrizDef.dropna() 
+    
+    #Estandarizacion de datos
+    Estandarizar = StandardScaler()
+    MEstandarizada = Estandarizar.fit_transform(NuevaMat)     
+    ME = pd.DataFrame(MEstandarizada, columns=NuevaMat.columns)
+    ME2 = ME.iloc[np.r_[0:5, -5:0]]
+    context['ME']=ME2
+
+    #Definición de k clusters para K-means
+    #Se utiliza random_state para inicializar el generador interno de números aleatorios
+    SSE = []
+    for i in range(2, 10):
+        km = KMeans(n_clusters=i, random_state=0)
+        km.fit(MEstandarizada)
+        SSE.append(km.inertia_)
+
+    #Grafica Elbow
+    figElb = px.line(SSE, markers=True)
+    figElb.update_layout(
+        title="Elbow Method",
+        xaxis_title="Cantidad de clusters *k*",
+        yaxis_title="SSE"
+    )
+
+    figVar = plot({'data': figElb}, output_type='div')
+    context['figVar']=figVar
+
+    kl = KneeLocator(range(2, 10), SSE, curve="convex", direction="decreasing")
+    context['knee']= kl.elbow
+
+    #Se crean las etiquetas de los elementos en los clusters
+    MParticional = KMeans(n_clusters=kl.elbow, random_state=0).fit(MEstandarizada)
+    MParticional.predict(MEstandarizada)
+    context['Mpart'] = MParticional.labels_
+
+    NuevaMat['clusterP'] = MParticional.labels_
+    context['DfClust'] = NuevaMat.iloc[np.r_[0:5, -5:0]]
+
+    #Cantidad de elementos en los clusters
+    ClustEl =NuevaMat.groupby(['clusterP'])['clusterP'].count()
+    ClustOut = pd.DataFrame(ClustEl).transpose()
+    context['ClustEl'] = ClustOut
+
+    #Centroides
+    CentroidesP = NuevaMat.groupby('clusterP').mean()
+    context['CentroidesP'] = CentroidesP
+
+    #Grafica 3d
+    figScat = px.scatter_3d(data_frame =NuevaMat, 
+                            x=MEstandarizada[:,0], 
+                            y=MEstandarizada[:,1], 
+                            z=MEstandarizada[:,2], 
+                            color = NuevaMat['clusterP'], 
+                            hover_name=NuevaMat['clusterP'], symbol='clusterP')
+    figScat.add_scatter3d(x=MParticional.cluster_centers_[:, 0], 
+                        y=MParticional.cluster_centers_[:, 1], 
+                        z=MParticional.cluster_centers_[:, 2], mode='markers')
+    
+    figScatOut = plot({'data': figScat}, output_type='div')
+    context['figVar2']=figScatOut
+
+    #Seleccion variables Predictoras y de pronostico
+    aux = pd.DataFrame(NuevaMat.loc[:, NuevaMat.columns != 'clusterP'])
+    X = np.array(NuevaMat.loc[:, NuevaMat.columns != 'clusterP'])
+    Xout = pd.DataFrame(data=X, columns=aux.columns.values)
+    Xout.to_csv(os.path.join(BASE_DIR, 'IngeniousPrediction/data/info/X.csv'), index=False)
+    context['X'] = Xout.iloc[np.r_[0:5, -5:0]]
+
+    Y = np.array(NuevaMat[['clusterP']])
+    Yout = pd.DataFrame(Y)
+    Yout.to_csv(os.path.join(BASE_DIR, 'IngeniousPrediction/data/info/Y.csv'), index=False)
+
+    
+    context['Y'] = Yout[:10]
+
+    #Division de los datos
+    X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, 
+                                                                                test_size = 0.2, 
+                                                                                random_state = 0,
+                                                                                shuffle = True)
+    
+    #ClasificacionBA = RandomForestClassifier(random_state=0)
+    #ClasificacionBA.fit(X_train, Y_train)
+
+    ClasificacionBA = RandomForestClassifier(n_estimators=105,
+                                            max_depth=8, 
+                                            min_samples_split=4, 
+                                            min_samples_leaf=2, 
+                                            random_state=1234)
+    ClasificacionBA.fit(X_train, Y_train)
+    
+    #Clasificación final 
+    Y_ClasificacionBA = ClasificacionBA.predict(X_validation)
+
+
+    #Comparacion entre pronostico y prueba
+    Valores = pd.DataFrame(Y_validation, Y_ClasificacionBA)
+    Valores2 = Valores.reset_index()
+    ValoresOut = Valores2.rename(columns={Valores2.columns[0]: 'Prueba', Valores2.columns[1]: 'Pronostico'})
+    #print(ValoresOut)
+    context['Valores'] = ValoresOut.iloc[np.r_[0:5, -5:0]]
+
+    #Obtencion del ajuste de Bondad
+    Score = accuracy_score(Y_validation, Y_ClasificacionBA)
+    context['Score'] = Score
+
+    #Matriz de clasificacion
+    ModeloClasificacion1 = ClasificacionBA.predict(X_validation)
+    Matriz_Clasificacion1 = pd.crosstab(Y_validation.ravel(), 
+                                   ModeloClasificacion1, 
+                                   rownames=['Reales'], 
+                                   colnames=['Clasificación']) 
+    context['MClas']=Matriz_Clasificacion1
+
+    #Criterios
+    criterios = []
+    criterios.append(ClasificacionBA.criterion)
+    print('Importancia variables: \n', ClasificacionBA.feature_importances_)
+    criterios.append(accuracy_score(Y_validation, Y_ClasificacionBA))
+    context['criterios'] = criterios
+    ReporteC =classification_report(Y_validation, Y_ClasificacionBA, output_dict=True)
+    RepClas = pd.DataFrame(ReporteC).transpose()
+    context['ReporteClas'] = RepClas
+
+    #Dataframe de la importancia de variables
+    Importancia = pd.DataFrame({'Variable': list(NuevaMat.loc[:, NuevaMat.columns != 'clusterP']),
+                            'Importancia': ClasificacionBA.feature_importances_}).sort_values('Importancia', ascending=False)
+    context['Imp'] = Importancia
+
+    #Reporte o arbol en texto
+    Estimador = ClasificacionBA.estimators_[50]
+
+    Reporte = export_text(Estimador, feature_names = list(NuevaMat.loc[:, NuevaMat.columns != 'clusterP']))
+    RepOut = []
+    RepOut = Reporte.split("\n")
+    context['reportes'] = RepOut
+
+    #Eleccion para nuevo pronostico
+    context['Pred'] = Modelo
+
+    #Lista dummy para en numero de clases en las curvas
+    num = []
+    for i in range (kl.elbow):
+        num.append(i)
+
+    #Rendimiento
+    y_score = ClasificacionBA.predict_proba(X_validation)
+    y_test_bin = label_binarize(Y_validation, classes=num)
+    n_classes = y_test_bin.shape[1]
+
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    AUC = []
+    for i in range(n_classes):
+        fpr[i], tpr[i], _ = roc_curve(y_test_bin[:, i], y_score[:, i])
+        if i == 0 :
+            figAUC = px.line(x=fpr[i], y=tpr[i])
+            figAUC.update_xaxes(range=[-0.05, 1.05])
+            figAUC.update_yaxes(range=[-0.05, 1.05])
+        else:
+            figAUC.add_scatter(x=fpr[i], y=tpr[i], mode='lines')
+        AUC.append('AUC para la clase {}: {}'.format(i+1, auc(fpr[i], tpr[i])))
+    figAUCout = plot({'data': figAUC}, output_type='div')
+    context['textAUC'] = AUC
+    context['AUC'] = figAUCout
+    return render(request, 'Clusters2.html', context)
+
+def SegClas_3(request,pk):
+    proyecto = Proyecto.objects.get(pk=pk)
+    context = {}
+    context['pk'] = pk
+    Val = request.POST.getlist('NClas')
+    X = pd.read_csv(os.path.join(BASE_DIR, 'IngeniousPrediction/data/info/X.csv'))
+    Y = pd.read_csv(os.path.join(BASE_DIR, 'IngeniousPrediction/data/info/Y.csv'))
+
+    #Division de los datos
+    X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, 
+                                                                                test_size = 0.2, 
+                                                                                random_state = 0,
+                                                                                shuffle = True)
     
 
-def lista_Proyectos(request):
-    proyectos = Proyecto.objects.all()
-    return render(request, 'Proyectos.html', {
-        'proyectos': proyectos
-    })
-
-def crea_Proyecto(request):
-    Nombre = request.POST['Nombre']
-    Desc = request.POST['descripcion']
-    URL = 'xd'
-    data = request.FILES['data']
+    ClasificacionBA = RandomForestClassifier(n_estimators=105,
+                                            max_depth=8, 
+                                            min_samples_split=4, 
+                                            min_samples_leaf=2, 
+                                            random_state=1234)
+    ClasificacionBA.fit(X_train, Y_train)
     
-    if Desc == '':
-        Desc = "Descripcion no proporcionada."
+    col = list(X.columns)
+    datoOut = {}
+    for i in range(X.shape[1]):
+        datoOut[col[i]] = float(Val[i])
+    Npron = pd.DataFrame(datoOut, index=[0])
+    context['DfN'] = Npron
+    resultado = ClasificacionBA.predict(Npron)
+    print(resultado)
+    context['resultado'] = resultado
 
-    ext = os.path.splitext(data.name)[1]
-    print(ext)
-    valid_extensions = '.csv'
-    if not ext.lower() in valid_extensions:
-        return redirect('/ErrorProyecto')
-    else:
-        Proyecto.objects.create(Nombre=Nombre, descripcion=Desc, URL = URL, data = data)
-        return redirect('project_list')
+    return render(request, 'Clusters3.html', context)
+
+
+
 
 def delete_project(request, pk):
     proyecto = Proyecto.objects.get(pk=pk)
@@ -752,4 +1011,11 @@ def ErrorProyecto(request):
     return render(request, 'ProyectosError.html', {
         'proyectos': proyectos
     })
+
+def lista_Proyectos(request):
+    proyectos = Proyecto.objects.all()
+    return render(request, 'Proyectos.html', {
+        'proyectos': proyectos
+    })
+
     
