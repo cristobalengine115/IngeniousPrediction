@@ -397,7 +397,7 @@ def ArbolDecision(request,pk,algType):
     flag = bool
     context['type'] = algType
     if algType == 'P':
-        context['AlgName'] = 'Pronostico'
+        context['AlgName'] = 'Pronóstico'
         flag = True
     elif algType == 'C':
         context['AlgName'] = 'Clasificacion'
@@ -447,11 +447,11 @@ def ArbolDecisionext(request, pk, algType):
 
     #Division de los datos
     X_train, X_dos, Y_train, Y_dos = model_selection.train_test_split(X, Y, 
-                                                                                    test_size = 0.2, 
-                                                                                    random_state = 0,
-                                                                                    shuffle = True)
+                                                                            test_size = 0.2, 
+                                                                            random_state = 0,
+                                                                            shuffle = True)
     if algType == 'P':
-        context['AlgName'] = 'Pronostico'
+        context['AlgName'] = 'Pronóstico'
         #Entrenamiento
         ModeloAD = DecisionTreeRegressor(random_state=0)
         
@@ -506,7 +506,7 @@ def ArbolDecisionext(request, pk, algType):
         Matriz_Clasificacion1 = pd.crosstab(Y_dos.ravel(), 
                                     ModeloClasificacion1, 
                                     rownames=['Actual'], 
-                                    colnames=['Clasificación']) 
+                                    colnames=['Clasificacion']) 
         context['MClas']=Matriz_Clasificacion1
 
         #Criterios
@@ -553,7 +553,7 @@ def ArbolDecisionext2(request,pk, algType):
                                                                         shuffle = True)
     
     if algType == 'P':
-        context['AlgName'] = 'Pronostico'
+        context['AlgName'] = 'Pronóstico'
         #Entrenamiento
         ModeloAD = DecisionTreeRegressor(random_state=0)            
         flag = True
@@ -582,7 +582,7 @@ def BosqueAleatorio(request,pk,algType):
     context['type'] = algType
 
     if algType == 'P':
-        context['AlgName'] = 'Pronostico'
+        context['AlgName'] = 'Pronóstico'
         flag = True
     elif algType == 'C':
         context['AlgName'] = 'Clasificacion'
@@ -637,7 +637,7 @@ def BosqueAleatorioext(request, pk, algType):
                                                                                     random_state = 0,
                                                                                     shuffle = True)
     if algType=='P':
-        context['AlgName'] = 'Pronostico'
+        context['AlgName'] = 'Pronóstico'
         #Entrenamiento
         ModeloBA = RandomForestRegressor(random_state=0)
         
@@ -692,7 +692,7 @@ def BosqueAleatorioext(request, pk, algType):
         Matriz_Clasificacion1 = pd.crosstab(Y_dos.ravel(), 
                                     ModeloClasificacion1, 
                                     rownames=['Actual'], 
-                                    colnames=['Clasificación']) 
+                                    colnames=['Clasificacion']) 
         context['MClas']=Matriz_Clasificacion1
 
         #Criterios
@@ -738,7 +738,7 @@ def BosqueAleatorioext2(request,pk, algType):
                                                                         shuffle = True)
     
     if algType=='P':
-        context['AlgName'] = 'Pronostico'
+        context['AlgName'] = 'Pronóstico'
         #Entrenamiento
         ModeloBA = RandomForestRegressor(random_state=0)
         flag = True
@@ -907,7 +907,7 @@ def SegClas_2(request, pk):
     Matriz_Clasificacion1 = pd.crosstab(Y_validation.ravel(), 
                                    ModeloClasificacion1, 
                                    rownames=['Reales'], 
-                                   colnames=['Clasificación']) 
+                                   colnames=['Clasificacion']) 
     context['MClas']=Matriz_Clasificacion1
 
     #Criterios

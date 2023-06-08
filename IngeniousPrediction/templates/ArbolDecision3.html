@@ -6,12 +6,12 @@
 {% block body %}
 <div class="row">
   <div class="col-xs-12">
-    <h1>Arboles de Decision: {{AlgName}}</h1>
+    <h1 style="font-size: 2rem;">Árboles de Decisión: {{AlgName}}</h1>
   </div>
 </div>
 
 <div class="row my-4">
-  <h5>Datasheet de los datos ingresados:</h5>
+  <h5 style="font-size: 2rem;">DataFrame de los datos ingresados:</h5>
   <div class="table-responsive">
     <table class="table  table-striped table-bordered table-hover">
       <tr>
@@ -42,12 +42,11 @@
 
 
 <div class="row my-4">
-  <p> <b>Nuevo pronostico:</b> <br>{{resultado.0}}</p>  
+  <p style=" font-size: 2rem;"> <b>Nuevo pronostico:</b> <br>{{resultado.0}}</p>  
 </div>
 
 <div class="col py-1">
-  <a class="btn btn-secondary" href="/AD/{{pk}}/{{type}}"> Volver a comenzar algoritmo</a>
-  <a class="btn btn-success" href="/Selector/AD"> Finalizar</a>
+  <a class="btn btn-secondary" href="/AD/{{pk}}/{{type}}" style="padding: 0.7rem; font-size: 2rem;"> Volver a comenzar algoritmo</a>
 </div>
 
 
